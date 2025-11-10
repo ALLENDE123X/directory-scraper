@@ -198,9 +198,20 @@ def enrich(
     endpoint: Optional[str] = typer.Option(None, help="Sixtyfour API endpoint"),
     api_key: Optional[str] = typer.Option(None, help="Sixtyfour API key"),
     batch_size: int = typer.Option(25, help="Batch size for API requests"),
+    use_async: bool = typer.Option(True, help="Use async endpoint (recommended, non-blocking)"),
 ) -> None:
-    """Enrich records using Sixtyfour API."""
+    """Enrich records using Sixtyfour API.
+    
+    By default uses the async endpoint which submits jobs and polls for results.
+    This is much faster for batch processing as jobs run in parallel.
+    Use --no-use-async for the synchronous endpoint (blocks for 5-10 min per record).
+    """
     console.print(f"[bold blue]Enriching records from {input}[/bold blue]")
+    
+    if use_async:
+        console.print("[green]Using async endpoint (submit + poll)[/green]")
+    else:
+        console.print("[yellow]Using sync endpoint (blocking)[/yellow]")
     
     # Load records
     try:
@@ -240,7 +251,7 @@ def enrich(
     
     # Enrich
     async def run_enrichment():
-        async with SixtyfourClient(config) as client:
+        async with SixtyfourClient(config, use_async=use_async) as client:
             results = await client.enrich_batch(records)
             return results
     

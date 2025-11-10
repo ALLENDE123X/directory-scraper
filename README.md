@@ -79,12 +79,23 @@ PYTHONPATH=src python -m scraper.cli evaluate \
 
 ### Enrich Data
 
+The enricher supports both synchronous and asynchronous endpoints. The async endpoint (default) is highly recommended as it allows parallel job processing:
+
 ```bash
+# Async endpoint (recommended) - submits all jobs, then polls for results
 PYTHONPATH=src python -m scraper.cli enrich \
   --input out/stanford.jsonl \
   --out out/stanford_enriched.jsonl \
-  --batch-size 1
+  --use-async
+
+# Sync endpoint (blocking) - waits 5-10 min per profile sequentially
+PYTHONPATH=src python -m scraper.cli enrich \
+  --input out/stanford.jsonl \
+  --out out/stanford_enriched.jsonl \
+  --no-use-async
 ```
+
+**Note**: Enrichment takes 5-10 minutes per profile. The async endpoint provides much better performance for batch processing.
 
 ## Architecture
 
@@ -112,10 +123,12 @@ PYTHONPATH=src python -m scraper.cli enrich \
 - SQLite run history for idempotency
 
 **Enricher** (`src/scraper/enricher/sixtyfour_client.py`)
-- Integration with Sixtyfour `/enrich-lead` API
+- Integration with Sixtyfour `/enrich-lead` and `/enrich-lead-async` APIs
+- Async endpoint (default): submit jobs, poll for completion - enables parallel processing
+- Sync endpoint (optional): blocking requests - simpler but slower for batches
 - Retry logic with exponential backoff
 - Idempotency headers for safe retries
-- Handles 5-10 minute response times
+- Handles 5-10 minute response times per profile
 
 ### Data Flow
 
@@ -227,12 +240,15 @@ Enrichment adds: phone numbers, LinkedIn profiles, personal websites, detailed r
 3. Incorrect request format (batch array instead of single lead with `lead_info` + `struct` structure)
 4. Response format mismatch (expected `enriched` array instead of `structured_data` object)
 5. Timeout too short (30s instead of 600s for 5-10 minute API response time)
+6. Sequential processing inefficient for 5-10 minute wait times per profile
 
 **Solution**: 
 - Consulted Sixtyfour API documentation (https://docs.sixtyfour.ai/api-reference/endpoint/enrich-lead)
 - Updated client to use correct endpoint, authentication, request/response formats
+- Implemented both synchronous and asynchronous endpoints
+- Async endpoint submits all jobs first, then polls for completion - enables parallel processing
 - Increased timeout to 10 minutes to accommodate API processing time
-- Result: 100% success rate on test data
+- Result: 100% success rate on test data with async mode providing significant speedup for batches
 
 ### Challenge 2: Generalizing Across Different Sites
 
