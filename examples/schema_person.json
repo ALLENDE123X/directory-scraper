@@ -1,0 +1,11 @@
+{
+  "name": "str",
+  "title": "str?",
+  "email": "email?",
+  "phone": "str?",
+  "page_url": "url",
+  "bio": "str?",
+  "org": "str?",
+  "location": "str?"
+}
+

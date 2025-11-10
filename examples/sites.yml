@@ -1,0 +1,36 @@
+sites:
+  engineering.stanford.edu:
+    root_url: "https://engineering.stanford.edu/people"
+    list_item_selector: ".views-row"
+    profile_link_selector: "a[href*='/people/']"
+    pagination_strategy: numbered
+    requires_js: false
+    field_label_synonyms:
+      title: ["position", "role", "title"]
+      email: ["email", "e-mail", "contact"]
+      org: ["department", "organization", "school"]
+      bio: ["biography", "about", "research interests"]
+  
+  mit.edu:
+    root_url: "https://www.eecs.mit.edu/people/faculty-advisors/"
+    list_item_selector: ".person-card"
+    profile_link_selector: "a.person-link"
+    pagination_strategy: none
+    requires_js: false
+    field_label_synonyms:
+      title: ["title", "position"]
+      email: ["email"]
+      org: ["department"]
+  
+  berkeley.edu:
+    root_url: "https://eecs.berkeley.edu/people/faculty"
+    list_item_selector: ".faculty-member"
+    profile_link_selector: "a.profile-link"
+    pagination_strategy: next_link
+    requires_js: true
+    wait_selector: ".faculty-member"
+    field_label_synonyms:
+      title: ["title", "rank"]
+      email: ["email", "contact"]
+      org: ["department", "division"]
+
