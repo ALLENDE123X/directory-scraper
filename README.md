@@ -1,4 +1,4 @@
-# Generalized Directory Scraper
+# Directory Scraper
 
 A production-ready web scraper designed to extract structured data from multi-page person and company directories. Built to handle varied website structures (both server-rendered and JavaScript-rendered) without site-specific hardcoding.
 
@@ -401,10 +401,6 @@ Tests use fixtures (HTML snapshots) to ensure deterministic results without live
 ## License
 
 MIT License - See LICENSE file for details
-
-## Author
-
-Built for Sixtyfour AI take-home assessment (Q4 2024)
 
 ## Notes
 
