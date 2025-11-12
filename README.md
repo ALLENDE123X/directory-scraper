@@ -217,24 +217,32 @@ Sample extracted profile:
 
 ### Sixtyfour API Enrichment
 
-Successfully tested with 42 Stanford Engineering profiles using the async endpoint:
+Successfully tested with 257 Stanford profiles (scraped from multiple sources), enriched 100:
 
 ```
-Total Profiles:       42
-Successfully Enriched: 42 (100%)
-Failed:               0
-Average Confidence:   9-10/10
-Processing Time:      ~7.5 minutes total (all jobs submitted in parallel)
+Total Profiles Scraped:       257
+Profiles Enriched:            100 (sampled)
+Success Rate:                 100.0%
+Average Confidence:           8.7/10 (range: 6-10/10)
+Processing Time:              ~12 minutes total (async, parallel)
 ```
+
+**Field Coverage** (out of 100 enriched profiles):
+- Company: 100/100 (100%)
+- Location: 100/100 (100%)
+- Website: 99/100 (99%)
+- Research Areas: 99/100 (99%)
+- Publications: 97/100 (97%)
+- Phone: 84/100 (84%)
+- Email: 77/100 (77%)
+- LinkedIn: 47/100 (47%)
 
 **Performance Comparison**:
-- Async endpoint: 42 jobs submitted in ~29 seconds, processed in parallel
-- Sync endpoint would have taken: 3.5-7 hours for 42 profiles
-- Speedup: **26-52x faster** with async mode
+- Async endpoint: 100 jobs submitted in ~50 seconds, processed in parallel
+- Sync endpoint would have taken: 8-16 hours for 100 profiles
+- Speedup: **40-80x faster** with async mode
 
-**Enriched Data**: The API successfully adds phone numbers, LinkedIn profiles, personal websites, detailed research areas, publication summaries, and 7-9 source references per profile with high confidence scores (9-10/10).
-
-See `FINAL_ENRICHMENT_RESULTS.md` for detailed analysis.
+**Enriched Data**: The API adds comprehensive professional information including phone numbers (84%), LinkedIn profiles (47%), personal websites (99%), detailed research areas (99%), publication summaries (97%), and source references (5-9 per profile) with high confidence scores (avg 8.7/10).
 
 ## Challenges & Solutions
 
